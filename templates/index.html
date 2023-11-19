@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Image Gallery</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <nav>
+        <div class="navbar">
+            <div class="logo">EmoNarrate</div>
+            <div class="nav-buttons">
+                <div class="dropdown">
+                    <button id="genreButton" class="dropbtn">Genre</button>
+                    <div class="dropdown-content" id="genreDropdown">
+                        <a href="#" data-genre="Fantasy">Fantasy</a>
+                        <a href="#" data-genre="Adventure">Adventure</a>
+                        <a href="#" data-genre="Mystery">Mystery</a>
+                        <a href="#" data-genre="Short Stories">Short Stories</a>
+                        <a href="#" data-genre="Fiction">Fiction</a>
+                        <a href="#" data-genre="Novel">Novel</a>
+                        <a href="#" data-genre="Literature">Literature</a>
+                        <!-- Add more genres as needed -->
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="search-container">
+        <label for="search">Search by Name:</label>
+        <input type="text" id="search" placeholder="Enter name...">
+    </div>
+    <div id="imageGallery" class="image-gallery"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
