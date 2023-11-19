@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #bookDetailsContainer {
+            display: flex;
+            align-items: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        #bookImage {
+            max-width: 50%;
+            height: auto;
+            margin-right: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #bookDetails {
+            max-width: 50%;
+            width: 100%;
+        }
+
+        #bookName {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #generateAudio {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #generateAudio:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="bookDetailsContainer">
+        <img id="bookImage" src="" alt="Book Image">
+        <div id="bookDetails">
+            <h2 id="bookName"></h2>
+            <button id="generateAudio">Generate Audio</button>
+            <div id="audioContainer"></div>
+        </div>
+    </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get book details from query parameters
+        const params = new URLSearchParams(window.location.search);
+        const bookName = params.get('name');
+        const bookUrl = params.get('url');
+        const pdfLocation = params.get('pdf_location');
+
+        // Update the book image and details on the page
+        const bookImage = document.getElementById('bookImage');
+        const bookNameElement = document.getElementById('bookName');
+        const generateAudioButton = document.getElementById('generateAudio');
+
+        bookImage.src = bookUrl;
+        bookNameElement.textContent = bookName;
+
+        // Add logic for generating audio
+        generateAudioButton.addEventListener('click', function () {
+            // Make a POST request to the Flask endpoint for audio generation
+            fetch('/generateAudio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'pdf_location': pdfLocation,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                
+                if (data.success) {
+                    generateAudioButton.style.display = 'none';
+                // Create an <audio> element to play the audio
+                const audioElement = document.createElement('audio');
+                audioElement.controls = true;
+                audioElement.src = data.audioPath;
+
+                // Append the <audio> element to the page
+                document.getElementById('audioContainer').appendChild(audioElement);
+            } else {
+                console.error('Error generating audio:', data.error_message);
+            }
+            })
+            .catch(error => console.error('Error generating audio:', error));
+        });
+    });
+</script>
+</body>
+</html>
